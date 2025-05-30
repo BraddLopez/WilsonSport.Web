@@ -1,7 +1,9 @@
-﻿using CapaEntidad;
-using CapaDatos;
-using System.Data.SqlClient;
+﻿using CapaDatos;
+using CapaEntidad;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 
 
 namespace CapaDatos
@@ -12,25 +14,35 @@ namespace CapaDatos
         {
             List<producto> lista = new List<producto>();
 
-            using (SqlConnection cn = conexion.Instancia.Conectar())
+            try
             {
-                SqlCommand cmd = new SqlCommand("SELECT IdProducto, Nombre, Tipo, Precio FROM Producto", cn);
-                cn.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-
-                while (dr.Read())
+                using (SqlConnection cn = conexion.Instancia.Conectar())
                 {
-                    lista.Add(new producto
+                    SqlCommand cmd = new SqlCommand("sp_ListarProductos", cn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cn.Open();
+
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
                     {
-                        IdProducto = (int)dr["IdProducto"],
-                        Nombre = dr["Nombre"].ToString(),
-                        Tipo = dr["Tipo"].ToString(),
-                        Precio = (decimal)dr["Precio"]
-                    });
+                        lista.Add(new producto
+                        {
+                            IdProducto = Convert.ToInt32(dr["IdProducto"]),
+                            Nombre = dr["Nombre"].ToString(),
+                            Tipo = dr["Tipo"].ToString(),
+                            Precio = Convert.ToDecimal(dr["Precio"])
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al listar productos: " + ex.Message);
             }
 
             return lista;
         }
+
     }
 }

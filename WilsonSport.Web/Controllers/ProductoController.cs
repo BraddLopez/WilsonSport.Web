@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CapaEntidad;
 using CapaLogica;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WilsonSport.Web.Controllers
 {
@@ -7,8 +8,8 @@ namespace WilsonSport.Web.Controllers
     {
         public IActionResult Index()
         {
-            var lista = ProductoLogica.Instancia.ObtenerProductos();
-            return View(lista);
+            List<producto> productos = ProductoLogica.Instancia.ObtenerProductos();
+            return View(productos);
         }
     }
 }

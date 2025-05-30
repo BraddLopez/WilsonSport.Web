@@ -28,7 +28,7 @@ namespace CapaDatos
 
             SqlConnection cn = new SqlConnection();
 
-            cn.ConnectionString = "Data Source=DESKTOP-46KF9NJ;initial Catalog=DMVentas;" + "Integrated Security=true";
+            cn.ConnectionString = "Data Source=DESKTOP-46KF9NJ;initial Catalog=WilsonBD;" + "Integrated Security=true";
 
             return cn;
 
